@@ -16,6 +16,24 @@ export class CourseItemsListingView {
       $section.find('.open-response-assessment-msg').show();
     }
 
+    const UnitCell = Backgrid.UriCell.extend({
+      staff: false,
+      render() {
+        this.$el.empty();
+        const url = this.model.get('url_courseware');
+        const rawValue = this.model.get(this.column.get('name'));
+        const formattedValue = this.formatter.fromRaw(rawValue, this.model);
+        const link = $('<a>', {
+          text: formattedValue,
+          title: this.title || formattedValue,
+          href: url,
+        });
+        this.$el.append(link);
+        this.delegateEvents();
+        return this;
+      },
+    });
+
     const AssessmentCell = Backgrid.UriCell.extend({
       staff: false,
       render() {
@@ -49,7 +67,7 @@ export class CourseItemsListingView {
         name: 'parent_name',
         label: gettext('Unit Name'),
         label_summary: gettext('Units'),
-        cell: 'string',
+        cell: UnitCell,
         num: false,
         editable: false,
       },
